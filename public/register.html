@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <title>DR.ASA Demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <style>
+      body {
+        width: 90%;
+        height: 100%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
+      table {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
+
+      td,
+      th {
+        border: 2px solid #999;
+        padding: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ลงทะเบียน</h1>
+    <form>
+      <input id="name" name="name" type="text" placeholder="ชื่อ" /><br />
+      <input id="email" name="email" type="text" placeholder="อีเมล" /><br />
+      <button type="button" onclick="test()">บันทึก</button>
+    </form>
+  </body>
+</html>
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const email = urlParams.get("email");
+  document.getElementById("email").value = email
+
+  function test() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("user_id");
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      user_id: userId,
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      status: true,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(
+      "https://us-central1-drasa-demo-6fd80.cloudfunctions.net/api/drasa_demo/save",
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => window.close())
+      .catch((error) => console.log("error", error));
+
+    // var myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/json");
+
+    // var raw = JSON.stringify({
+    //   user_id: userId,
+    // });
+
+    // var requestOptions = {
+    //   method: "POST",
+    //   headers: myHeaders,
+    //   body: raw,
+    //   redirect: "follow",
+    // };
+
+    // fetch(
+    //   "https://us-central1-drasa-demo-6fd80.cloudfunctions.net/api/drasa_demo/push",
+    //   requestOptions
+    // )
+    //   .then((response) => response.text())
+    //   .then((result) => console.log(result))
+    //   .catch((error) => console.log("error", error));
+  }
+</script>
